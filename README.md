@@ -128,3 +128,4 @@ We thus show that our model is well suited to predicting the best players across
 
 Other possible explanations for why our model rankings might differ from expert's All-Pro Teams could include differences in the weighting of different performance metrics or the inclusion of certain metrics that are not considered by the All-Pro Teams panel. Additionally, the model may not be able to account for intangible factors such as player experience, mentality, or team chemistry. Finally, the model may be affected by the quality of the data used to train it, such as differences in data collection or availability.
 
+### TO ADD : MODEL ISSUES (IN ipynb not converted to readme yet)
