@@ -119,8 +119,12 @@ We can see an overlap of the following players within the top 3 for each role :
 
 (Lehends appears 5th on our list, and Kael pushes into the top 3 instead)
 
-Overall, there are many interesting factoids and things of note from this split, the key one I wish to mention is that the team 'T1' are just straight up the First All-Pro Team. Coming from a close 3-2 defeat in a Best of 5 game at the 2022 Worlds', T1 have appeared equally stellar for the Spring 2023 split and sweeped the competition with a 17-1 W/L record in the LCK's double round robin format. 
+Overall, there are many interesting factoids and things of note from this split, the key one I wish to mention is that the team 'T1', are just straight up the First All-Pro Team (All members of T1 are directly part of the First All Pro-Team). Coming from a close 3-2 defeat in a Best of 5 game at the 2022 Worlds', T1 have appeared equally stellar for the Spring 2023 split and sweeped the competition with a 17-1 W/L record in the LCK's double round robin format. 
 
-This may be a possible cause of why T1 players are extremely highly ranked by experts, while our model which only looks at raw stats is not able to find much of a difference. 
+This may be a possible cause of why T1 players are extremely highly ranked by experts, while our model which only looks at raw stats is not able to find much of a difference.
 
+### Possible Explanation for model deficits
+We thus show that our model is well suited to predicting the best players across a split, but some unaccountable [by out model] conditions such as being overshadowed through overlapping stats (DMG%, GOLD% are shared across all 'carry' roles of ADC, Top, Mid), being unable to account for factors such as LIDERship or effect on team atmosphere, or strategizing skills can also greatly influence a player's ranking. (Eg. Huni - ex-pro player, saying how Faker called plays minutes in advance and set up the team for success)
+
+Other possible explanations for why our model rankings might differ from expert's All-Pro Teams could include differences in the weighting of different performance metrics or the inclusion of certain metrics that are not considered by the All-Pro Teams panel. Additionally, the model may not be able to account for intangible factors such as player experience, mentality, or team chemistry. Finally, the model may be affected by the quality of the data used to train it, such as differences in data collection or availability.
 
