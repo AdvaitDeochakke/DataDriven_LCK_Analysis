@@ -9,29 +9,19 @@ Our findings indicate that our model is effective in predicting the top-performi
 
 # In-Depth Explanation for each part
 ## Data Acquisition and Pre-processing
-As the Riot-API does not support pro-games, we use the private API data (stuff that is officially posted) and is available through sites such as Oracle's Elixir. This site gives us the data for players across the split, and we combine it with the MVP rankings availble on liquidpedia (or lol.fandom). This gives us the first stage of our data.
+To obtain the necessary data for our model, we utilized the private API data from sources such as Oracle's Elixir, as the Riot-API does not support pro-games. We also incorporated MVP rankings from reputable sites like liquidpedia and lol.fandom to enhance our data. We ensured accuracy by adjusting for factors such as team names and player role-swaps.
 
-We take care of things such as team names, players who swap roles, etc.
-
-Then we scale the data. The scaling is done per split. This is done with the logic of patches causing change in playstyle, gameplay, and more; so we shouldnt treat player data from 2015 on the same wavelength as player data from 2022. 
-
-Furthermore, we keep a copy of the unscaled data, to record changes in model fit and performance with the two sets.
+We then proceeded to scale the data per split, acknowledging that patches can cause changes in gameplay and playstyle that affect player performance. We kept an unscaled dataset to compare the performance of the two sets.
 
 ## Short note
-We first check if there are very significant difference between players of a given role. The idea is that aggressive/defensive, tank/carry tops, or other various archetypes associated with players can be clearly seen through data. 
-
-However, we find that when we run KNN Clustering on the role data, the silhouette scores obtained are always around ~0.3, which means that the clusters are not significantly different from each other. Thus we were unable to use data to clearly markdown different playstyles withing a given role.
+Initially, we attempted to identify significant differences between player roles by running KNN clustering on role data. However, the obtained silhouette scores (~0.3) did not support distinct clustering of different playstyles within a given role.
 
 ## Feature selection and verifying difference between roles
-We decided to rank players/develop different models for each role, and took a series of tests to verify that there is enough significant difference between roles (Based on their datapoints) to justify using different models. Plus, we also ran feature selection for each role based on RFE and VIF
+We then focused on developing different models and ranking players based on their roles. We carried out tests to verify that there was significant enough difference between roles to justify using separate models. Furthermore, we utilized scatterplots based on PCAs 1 and 2 to visualize differences between roles. We found that Support and Jungle were clearly distinguishable from other roles, while Top, Middle, and ADC had some overlap but were also distinguishable from each other.
 
-We use scatterplot based on PCAs 1 and 2of the data, to see if we can visually see a clear difference between roles, and find Support and Jungle being extremely clearly differentiated from the rest, while Top, Middle, and ADC are also recognizable offset from each other but have decent overlap.
+We utilized an XGBClassifier and LSTM model to assign roles to players based on their datapoints and achieved an accuracy of approximately 80% and 75%, respectively, affirming the significant differences between player roles.
 
-We then use an XGBClassifier and a LSTM model to check if we can reliably assign a role to player based on their datapoints. We get an accuracy of ~80% and ~75% for them respectively, and thus are able to say that yes, the roles have significant difference between them.
-
-Next, we move to feature selection. We first get a correlation plot to visually check out our available features. When some features have insanely high correlation (for ex. greater than 0.9) we can take the inititative of removing them to prevent inflation.
-
-We then run RFE on the data for each role, and get a list of representative columns. These supports help us to minimize noise in the dataset.
+Finally, we used a correlation plot and ran RFE for each role to minimize noise in the dataset and obtain a list of representative columns for each role.
 
 ## Models
 Our model is divided into three main categories: Neural Networks, Traditional ML Models, and an Ensemble Model. To evaluate the performance of these models, we use the mean squared error loss function, along with secondary evaluations using MAPE and R2_score.
