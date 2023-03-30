@@ -1,20 +1,11 @@
 The project is summarized here
 
 # Overall Description
-Data from LCK players is taken, used to train a model. The model is an ensemble model which incorporates 
-Neural Networks and traditional ML models.
+This project aims to create a predictive model for ranking professional League of Legends players in the Korean league (LCK) based on their in-game statistics. We use a combination of machine learning algorithms and statistical analysis techniques to identify the most important performance metrics and build a predictive model that can accurately rank players based on their role. Our model incorporates various features such as kill participation, gold per minute, damage dealt, and vision score, among others. 
 
-The exact models used are LSTMs, Convolution networks, a stacked LSTM with dropout layers, and simple RNN. 
-For traditional ML models, we have XGRegressor, Support Vectors, KNN regressors, GaussianProcess kernels, and 
-a Random Forest regression model.
+We also take into account expert opinions and percentile rankings based on the performance of other players in each role. To validate our model, we compare its rankings with the All-Pro Teams selected by a panel of experts, media representatives, and fans. 
 
-We use the models to generate points for players, these points are representative of their skill/otherwise value. It is based on the MVP points awarded to players by expert analysis.
-
-Finally, we use such points to rank players within their roles. We use a second method of deciding ranks based purely on what the rank of the player is when sorting by a specific value. We aggregate these along with the base MVP point-rankings to get a final result.
-
-We then show that our model gets 11 out of the 15 players which make up the top-3 rankings in expert based methods (All-Pro First to Third Teams from LCK Spring 2023), 2 out of 15 are a close 4th, while the other 2 are 5th and 6th in our ranking respectively.
-
-We thus show that our model is well suited to predicting the best players across a split, but some unaccountable [by out model] conditions such as being overshadowed through overlapping stats (DMG%, GOLD% are shared across all 'carry' roles of ADC, Top, Mid), being unable to account for factors such as LIDERship or effect on team atmosphere, or strategizing skills can also greatly influence a player's ranking.(https://www.reddit.com/r/leagueoflegends/comments/11ckymg/hunis_thoughts_on_fakers_leadership_role_in_t1/)
+Our findings indicate that our model is effective in predicting the top-performing players within a split. However, it is limited in its ability to consider intangible factors such as team dynamics, mental state, and strategic decision-making. Despite this, our model can still be a valuable resource for teams, coaches, and fans to evaluate player performance and make informed decisions.
 
 # In-Depth Explanation for each part
 ## Data Acquisition and Pre-processing
@@ -42,39 +33,23 @@ Next, we move to feature selection. We first get a correlation plot to visually 
 
 We then run RFE on the data for each role, and get a list of representative columns. These supports help us to minimize noise in the dataset.
 
-
 ## Models
-We use three main divisions of model, whose performance we evalute with the loss function of mean squared error, and a secondary evaluation with MAPE and R2_score 
+Our model is divided into three main categories: Neural Networks, Traditional ML Models, and an Ensemble Model. To evaluate the performance of these models, we use the mean squared error loss function, along with secondary evaluations using MAPE and R2_score.
 
 ### Neural Networks
-We use a total of 5 models for checking performance. A basic LSTM with a linear activation function, a basic LSTM with sigmoid activation function, a stacked LSTM with Dropout layer, a Convolution, and simple RNN. 
-We train a version of each based on the role data, for a total of 25 such models. For each neural network, we plot and see how our prediction corresponds to the actual MVP 'ranking'. 
-
-We see that our neural networks are typically extremely poor in evaluating Top and Support players, while being ~okay for the other roles.
+For our Neural Networks, we use a total of five models, including a basic LSTM with a linear activation function, a basic LSTM with sigmoid activation function, a stacked LSTM with a Dropout layer, a Convolution, and a simple RNN. We train a version of each based on role data, resulting in a total of 25 models. For each neural network, we plot and analyze how our prediction corresponds to the actual MVP ranking. However, we find that our neural networks are not as effective in evaluating Top and Support players as they are for other roles.
 
 ### Traditional ML Models
-We use XGRegressor, RF, SVR, KNN, and GPK here. They are executed similarly to above, and we find that they are typically performing similar to our NN models. 
-
-They have lower MAPEs, a bit higher MSE (loss), and similar or better R2 score. Especially in the Top and Support roles, our ML models seems to perform significantly better in accordance with expert rankings.
+In addition to our Neural Networks, we also employ Traditional ML Models, including XGRegressor, RF, SVR, KNN, and GPK. These models are executed in a similar manner to the neural networks, and we find that they typically perform similarly to our NN models. They have lower MAPEs, slightly higher MSE (loss), and similar or better R2 score. Interestingly, our ML models seem to perform significantly better in ranking Top and Support roles, in accordance with expert rankings.
 
 ### Why we dont care about the actual number output
-Our final goal is ranking players within their role, not giving a prediction of MVP points. We have a good model as long as our final rankings are good.
-
-Another point is that some models are better at ranking certain roles compared to others, so we desire a collection of models to capture the various aspects involved. 
+Our final goal is to rank players within their role, rather than predicting MVP points. Therefore, the actual number output from the models is not a major concern. We believe our models are effective as long as the final rankings are accurate. 
 
 ### Third and Final, Ensemble Model
-We create a VotingRegressor to combine our Traditional ML model. To incorporate our Keras Neural Networks, we pass the outputs from the networks as a form of feature along with the other selected features. We thus augment the dataset and send them to the Voting Regressor to get a final output. 
+Finally, we create an Ensemble Model using a VotingRegressor to combine our Traditional ML models. To incorporate our Keras Neural Networks, we pass the outputs from the networks as a feature along with the other selected features. By augmenting the dataset in this manner, we can send the combined features to the Voting Regressor to obtain a final output.
 
 ## Rankings
-We use a threefold system to arrive onto the final rankings for our players. We incorporate our model's rankings, rankings based on the percentile for players under their selected features, and the expert selected list.
-
-First, we take the ranks based on the expert ratings (MVP Points). Its just simply sorting by MVP Points within the role, and then assignning ranks.
-
-Next, we take the percentile ranks. We define these as the average of the ranks for the given player compared to their peers, for the selected features of their role. After taking the average, we sort and convert it to a true ranking.
-
-Finally, we use our ensemble model to get an output of 'MVP points', which we utilize in the same manner as the first ranking scheme.
-
-Lastly, we combine them, average, and convert to a true ranking.
+Rankings are determined using a threefold system. First, expert ratings (MVP Points) are used to assign ranks within each role. Next, percentile ranks are calculated by comparing a player's rank to their peers for selected features of their role. The ensemble model is used to calculate MVP points, which are used to assign a third set of ranks. Finally, the three sets of ranks are combined, averaged, and converted into a final true ranking.
 
 ## Results
 To validate our model and rankings, we use the LCK All-Pro Teams as a form of checking the Top 3 players under each role. For our purposes, we use the full data from 2015-2022 LCK in the training process, and will now use data from LCK 2023 Spring to test our model. 
@@ -119,13 +94,28 @@ We can see an overlap of the following players within the top 3 for each role :
 
 (Lehends appears 5th on our list, and Kael pushes into the top 3 instead)
 
-Overall, there are many interesting factoids and things of note from this split, the key one I wish to mention is that the team 'T1', are just straight up the First All-Pro Team (All members of T1 are directly part of the First All Pro-Team). Coming from a close 3-2 defeat in a Best of 5 game at the 2022 Worlds', T1 have appeared equally stellar for the Spring 2023 split and sweeped the competition with a 17-1 W/L record in the LCK's double round robin format. 
-
-This may be a possible cause of why T1 players are extremely highly ranked by experts, while our model which only looks at raw stats is not able to find much of a difference.
+Overall, it is worth noting that all players from team 'T1' are part of the First All-Pro Team (expert), which is an unprecendented feat. There may be many reasons why the rankins differ between our model and experts, as we discuss below.
 
 ### Possible Explanation for model deficits
-We thus show that our model is well suited to predicting the best players across a split, but some unaccountable [by out model] conditions such as being overshadowed through overlapping stats (DMG%, GOLD% are shared across all 'carry' roles of ADC, Top, Mid), being unable to account for factors such as LIDERship or effect on team atmosphere, or strategizing skills can also greatly influence a player's ranking. (Eg. Huni - ex-pro player, saying how Faker called plays minutes in advance and set up the team for success)
+While our model is well-suited to predicting the best players across a split, there are several factors that it cannot account for, such as overlapping stats across different roles, intangible factors such as player experience or team chemistry, and the quality of the data used to train it. It is possible that the All-Pro Teams panel weights performance metrics differently or includes metrics that are not considered by our model.
 
-Other possible explanations for why our model rankings might differ from expert's All-Pro Teams could include differences in the weighting of different performance metrics or the inclusion of certain metrics that are not considered by the All-Pro Teams panel. Additionally, the model may not be able to account for intangible factors such as player experience, mentality, or team chemistry. Finally, the model may be affected by the quality of the data used to train it, such as differences in data collection or availability.
+Furthermore, it is worth noting that factors such as a player's effect on team atmosphere, strategizing skills, and leadership qualities can greatly influence their ranking, but may not be accounted for by our model. For example, ex-pro player Huni mentioned how Faker's ability to call plays minutes in advance and set up the team for success had a significant impact on their performance.
 
-### TO ADD : MODEL ISSUES (IN ipynb not converted to readme yet)
+### Model Issues
+Possible Issues with the model : 
+
+1. Availability of stats : Not all stats our model chose [from the training dataset] may be available for any arbitrary testing dataset. For example, datasets from the LPL do not include stats like FB% (First Blood %age), CSD10 (CS Difference @10), etc.
+
+2. All features are model selected : The issue here lies in explaining why certain features are missing or absent for particular role rankings. Eg. conventionally, the Bottom role is not expected to be evaluated with the extensive use of features such as WPM, CWPM, or WCPM. Our model makes these selections to give a good measure of MVP points, but it may seem as unexplainable choices to observers and experts. 
+
+3. Limited model adaptation : For inputs of neural networks to the ensemble model, we do not weight the outputs based on any loss function. Similarly for comparing models inside the VotingRegressor, we also simply give arbitrary weightings based on visual analysis.
+
+4. No accounting for first pricks/priority picks/lane counterpicks : The game's structure means that teams generally have at most two carry champions, which are usually in the Bot and (Mid or Top) positions. This can negatively impact other positions, where they always get put on champions which have good econ but lower ceilings, or be put into counter matchups which negatively impact the stats which we consider. 
+
+5. Not accounting for teamfight importance: Our dataset may skew towards stats like kills and gold%, which may not accurately represent the importance of tanks or champions with heavy CC in teamfights. This can result in the players which regularly play such champions being misrepresented in our model's rankings.
+
+### Future Work:
+
+1. The most important area of improvement for our model is to refine the way we process and use our models. Currently, we use a variety of models in an arbitrary manner with arbitrary weights. By refining this process, we can potentially see a significant boost in the accuracy of our MVP Points outputs, which would have a smaller effect on the player rankings themselves.
+
+2. Improving our feature selection process can increase the adaptability of our model. We can create a list of features to be selected and in what order, allowing us to navigate around the lack of availability of certain features. Furthermore, we can apply weightings to the features so that the rankings received from more important features are worth more than those received from less important features.
