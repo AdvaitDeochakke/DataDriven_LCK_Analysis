@@ -1,5 +1,3 @@
-The project is summarized here
-
 # Overall Description
 This project aims to create a predictive model for ranking professional League of Legends players in the Korean league (LCK) based on their in-game statistics. We use a combination of machine learning algorithms and statistical analysis techniques to identify the most important performance metrics and build a predictive model that can accurately rank players based on their role. Our model incorporates various features such as kill participation, gold per minute, damage dealt, and vision score, among others. 
 
@@ -87,7 +85,7 @@ We can see an overlap of the following players within the top 3 for each role :
 Overall, it is worth noting that all players from team 'T1' are part of the First All-Pro Team (expert), which is an unprecendented feat. There may be many reasons why the rankins differ between our model and experts, as we discuss below.
 
 ### Possible Explanation for model deficits
-While our model is well-suited to predicting the best players across a split, there are several factors that it cannot account for, such as overlapping stats across different roles, intangible factors such as player experience or team chemistry, and the quality of the data used to train it. It is possible that the All-Pro Teams panel weights performance metrics differently or includes metrics that are not considered by our model.
+While our model is well-suited to predicting the best players across a split, there are several factors that it cannot account for, such as overlapping stats across different roles, intangible factors such as player experience or team chemistry, and the quality of the data used to train it. The overlapping of stats which have limited availability (like GOLD% or Kills) is also a factor, where a heavy carry player on the team can outshine a second player in these limited stats, losing points for the second one.
 
 Furthermore, it is worth noting that factors such as a player's effect on team atmosphere, strategizing skills, and leadership qualities can greatly influence their ranking, but may not be accounted for by our model. For example, ex-pro player Huni mentioned how Faker's ability to call plays minutes in advance and set up the team for success had a significant impact on their performance.
 
