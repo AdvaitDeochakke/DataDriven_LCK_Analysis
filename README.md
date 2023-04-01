@@ -1,3 +1,5 @@
+(Please check the pdf file if you want the paper)
+
 # Overall Description
 This project aims to create a predictive model for ranking professional League of Legends players in the Korean league (LCK) based on their in-game statistics. We use a combination of machine learning algorithms and statistical analysis techniques to identify the most important performance metrics and build a predictive model that can accurately rank players based on their role. Our model incorporates various features such as kill participation, gold per minute, damage dealt, and vision score, among others. 
 
